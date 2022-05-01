@@ -20,7 +20,7 @@ public class Bot extends TelegramLongPollingBot {
     private ReplyKeyboardMarkup replyKeyboardMarkup;
 
     Bot() {
-        storage = new Storage();
+        storage = new Storage("https://citatnica.ru/citaty/mudrye-tsitaty-velikih-lyudej");
         initKeyboard();
     }
 

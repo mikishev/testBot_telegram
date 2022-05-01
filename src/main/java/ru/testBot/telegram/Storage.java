@@ -1,5 +1,10 @@
 package ru.testBot.telegram;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -7,12 +12,10 @@ import java.util.ArrayList;
  */
 public class Storage {
     private ArrayList<String> quoteList;
-    Storage()
+    Storage(String url)
     {
         quoteList = new ArrayList<>();
-        quoteList.add("Начинать всегда стоит с того, что сеет сомнения. \n\nБорис Стругацкий.");
-        quoteList.add("80% успеха - это появиться в нужном месте в нужное время.\n\nВуди Аллен");
-        quoteList.add("Мы должны признать очевидное: понимают лишь те,кто хочет понять.\n\nБернар Вербер");
+        parser(url);
     }
 
     String getRandQuote()
@@ -20,5 +23,25 @@ public class Storage {
 
         int randValue = (int)(Math.random() * quoteList.size());
         return quoteList.get(randValue);
+    }
+
+    /**
+     * Парсер страницы
+     * @param strURL
+     */
+    void parser(String strURL)
+    {
+        String className = "su-note-inner su-u-clearfix su-u-trim";
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(strURL).maxBodySize(0).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Elements elQuote = doc.getElementsByClass(className);
+        elQuote.forEach(el -> {
+            quoteList.add(el.text());
+        });
     }
 }

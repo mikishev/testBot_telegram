@@ -2,6 +2,9 @@ package ru.testBot.telegram;
 
 import java.util.ArrayList;
 
+/**
+ * Хранилище цитат
+ */
 public class Storage {
     private ArrayList<String> quoteList;
     Storage()
@@ -14,9 +17,8 @@ public class Storage {
 
     String getRandQuote()
     {
-        //получаем случайное значение в интервале от 0 до самого большого индекса
+
         int randValue = (int)(Math.random() * quoteList.size());
-        //Из коллекции получаем цитату со случайным индексом и возвращаем ее
         return quoteList.get(randValue);
     }
 }

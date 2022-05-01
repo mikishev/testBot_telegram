@@ -4,16 +4,24 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+
 public class Bot extends TelegramLongPollingBot {
+
+
     final private String BOT_TOKEN = "5344931381:AAGftdp_Q9U8skmmcE227ziTho_8xjbfML0";
     final private String BOT_NAME = "example27042022_bot";
     private Storage storage;
+    private ReplyKeyboardMarkup replyKeyboardMarkup;
 
-    Bot()
-    {
+    Bot() {
         storage = new Storage();
+        initKeyboard();
     }
 
     @Override
@@ -26,42 +34,63 @@ public class Bot extends TelegramLongPollingBot {
         return BOT_TOKEN;
     }
 
+    /**
+     * Метод для обработки и отправки сообщения в чат.
+     * @param update - объект который приходит от пользователя.
+     */
     @Override
     public void onUpdateReceived(Update update) {
         try{
             if(update.hasMessage() && update.getMessage().hasText())
             {
-                //Извлекаем из объекта сообщение пользователя
                 Message inMess = update.getMessage();
-                //Достаем из inMess id чата пользователя
                 String chatId = inMess.getChatId().toString();
-                //Получаем текст сообщения пользователя, отправляем в написанный нами обработчик
                 String response = parseMessage(inMess.getText());
-                //Создаем объект класса SendMessage - наш будущий ответ пользователю
                 SendMessage outMess = new SendMessage();
-
-                //Добавляем в наше сообщение id чата а также наш ответ
+                outMess.setReplyMarkup(replyKeyboardMarkup);
                 outMess.setChatId(chatId);
                 outMess.setText(response);
-
-                //Отправка в чат
                 execute(outMess);
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Сравниваем текст введенный пользователем с имеющимися командами
+     * @param textMsg - сообщение пользователя
+     * @return - ответ
+     */
     public String parseMessage(String textMsg) {
         String response;
 
-        //Сравниваем текст пользователя с нашими командами, на основе этого формируем ответ
+
         if(textMsg.equals("/start"))
             response = "Приветствую, бот знает много цитат. Жми /get, чтобы получить случайную из них";
-        else if(textMsg.equals("/get"))
+        else if(textMsg.equals("/get") || textMsg.equals("Просвяти"))
             response = storage.getRandQuote();
         else
             response = "Сообщение не распознано";
 
         return response;
     }
+
+    /**
+     * Добавляем клавиатуру.
+     */
+    public void initKeyboard()
+    {
+
+        replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        ArrayList<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow keyboardRow = new KeyboardRow();
+        keyboardRows.add(keyboardRow);
+        keyboardRow.add(new KeyboardButton("Просвяти"));
+        replyKeyboardMarkup.setKeyboard(keyboardRows);
+    }
+
+
 }

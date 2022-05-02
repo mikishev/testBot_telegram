@@ -36,7 +36,7 @@ public class Bot extends TelegramLongPollingBot {
 
     /**
      * Метод для обработки и отправки сообщения в чат.
-     * @param update - объект который приходит от пользователя.
+     * @param update - объект, который приходит от пользователя.
      */
     @Override
     public void onUpdateReceived(Update update) {

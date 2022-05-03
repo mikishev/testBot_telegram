@@ -14,24 +14,37 @@ import java.util.ArrayList;
 public class Bot extends TelegramLongPollingBot {
 
 
-    final private String BOT_TOKEN = "5344931381:AAGftdp_Q9U8skmmcE227ziTho_8xjbfML0";
-    final private String BOT_NAME = "example27042022_bot";
+    private String tokenBot;
+    private String nameBot;
     private Storage storage;
     private ReplyKeyboardMarkup replyKeyboardMarkup;
+    private WeatherCache weatherCache;
 
     Bot() {
         storage = new Storage("https://citatnica.ru/citaty/mudrye-tsitaty-velikih-lyudej");
         initKeyboard();
     }
 
+    public void setTokenBot(String tokenBot) {
+        this.tokenBot = tokenBot;
+    }
+
+    public void setNameBot(String nameBot) {
+        this.nameBot = nameBot;
+    }
+
+    public void setWeatherCache(WeatherCache weatherCache) {
+        this.weatherCache = weatherCache;
+    }
+
     @Override
     public String getBotUsername() {
-        return BOT_NAME;
+        return nameBot;
     }
 
     @Override
     public String getBotToken() {
-        return BOT_TOKEN;
+        return tokenBot;
     }
 
     /**
@@ -67,11 +80,22 @@ public class Bot extends TelegramLongPollingBot {
 
 
         if(textMsg.equals("/start"))
-            response = "Приветствую, бот знает много цитат. Жми /get, чтобы получить случайную из них";
+            response = "Приветствую, бот знает много цитат. Жми /get, чтобы получить случайную из них," +
+                    "еще здесь можно узнать погоду в твоем городе!";
+
         else if(textMsg.equals("/get") || textMsg.equals("Просвяти"))
             response = storage.getRandQuote();
-        else
-            response = "Сообщение не распознано";
+        else if (textMsg.equals("Узнать погоду!")){
+            response = "Введите название города!";
+        }
+        else {
+            WeatherInfo weatherInfo = weatherCache.getWeatherInfo(textMsg);
+            if (weatherInfo != null) {
+                response = weatherInfo.toString();
+            }
+            else
+                response = "Сообщение не распознано!";
+        }
 
         return response;
     }
@@ -89,8 +113,7 @@ public class Bot extends TelegramLongPollingBot {
         KeyboardRow keyboardRow = new KeyboardRow();
         keyboardRows.add(keyboardRow);
         keyboardRow.add(new KeyboardButton("Просвяти"));
+        keyboardRow.add(new KeyboardButton("Узнать погоду!"));
         replyKeyboardMarkup.setKeyboard(keyboardRows);
     }
-
-
 }

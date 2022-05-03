@@ -83,12 +83,11 @@ public class WeatherInfo {
     @Override
     public String toString() {
         return "{" +
-                "city='" + city + '\'' +
-                ", shortDescription='" + shortDescription + '\'' +
-                ", description='" + description + '\'' +
-                ", temperature=" + temperature +
-                ", feelsLikeTemperature=" + feelsLikeTemperature +
-                ", windSpeed=" + windSpeed +
+                "Город: '" + city + '\'' +
+                ", сейчас'" + description + '\'' +
+                ", температура" + temperature + " C " + '\'' +
+                ", ощущается как, " + feelsLikeTemperature + " C " +
+                ", скорость ветра " + windSpeed + " м/c" +
                 ", pressure=" + pressure +
                 ", expiryTime=" + expiryTime +
                 '}';

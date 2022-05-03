@@ -81,7 +81,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if(textMsg.equals("/start"))
             response = "Приветствую, бот знает много цитат. Жми /get, чтобы получить случайную из них," +
-                    "еще здесь можно узнать погоду в твоем городе!";
+                    "еще здесь можно узнать погоду в городе!";
 
         else if(textMsg.equals("/get") || textMsg.equals("Просвяти"))
             response = storage.getRandQuote();

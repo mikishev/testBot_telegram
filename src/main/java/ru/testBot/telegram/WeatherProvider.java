@@ -1,16 +1,26 @@
 package ru.testBot.telegram;
 
+import com.ibm.icu.text.Transliterator;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Enumeration;
+import java.util.Map;
 
 public class WeatherProvider {
 
     private RestTemplate restTemplate;
     private String appKey;
+    public static final String CYRILLIC_TO_LATIN = "Russian-Latin/BGN";
 
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -29,11 +39,28 @@ public class WeatherProvider {
      * @return weather info or null
      */
     public WeatherInfo get(String city) {
-        String weatherResourceUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + appKey;
+
         WeatherInfo weatherInfo = new WeatherInfo();
+//        Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
+//        String result = toLatinTrans.transliterate(city);
+        String result = null;
+        try {
+            result = URLEncoder.encode(city, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Map<String, String> params = Map.of("q", result,
+                "appid", appKey,
+                "units", "metric",
+                "lang", "ru");
+        System.out.println(result);
+//                String weatherResourceUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + result + "&appid=" + appKey + "&units=metric&lang=ru";
+        String weatherResourceUrl = "http://api.openweathermap.org/data/2.5/weather?q={q}&appid={appid}&units={units}&lang={lang}";
 
         try {
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(weatherResourceUrl, String.class);
+
+            System.out.println(weatherResourceUrl);
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity(weatherResourceUrl, String.class, params);
 
             if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
                 JSONObject json = new JSONObject(responseEntity.getBody());
@@ -47,6 +74,7 @@ public class WeatherProvider {
                 weatherInfo.setPressure(json.getJSONObject("main").getDouble("pressure"));
                 weatherInfo.setExpiryTime(LocalDateTime.now());
                 return weatherInfo;
+
             }
         } catch (Exception ex) {
             throw new RuntimeException("disconnected" + ex.getMessage());

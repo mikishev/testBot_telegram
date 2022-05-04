@@ -1,6 +1,7 @@
 package ru.testBot.telegram;
 
 import com.ibm.icu.text.Transliterator;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +9,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Enumeration;
 import java.util.Map;
 
+@Slf4j
 public class WeatherProvider {
 
     private RestTemplate restTemplate;
@@ -69,6 +69,7 @@ public class WeatherProvider {
 
             }
         } catch (Exception ex) {
+            log.error("ERROR!!!: " + city + " doesn't exist!");
             throw new RuntimeException("disconnected" + ex.getMessage());
         }
         return weatherInfo;

@@ -1,7 +1,6 @@
 package ru.testBot.telegram;
 
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -13,7 +12,9 @@ import java.util.ArrayList;
  * Хранилище цитат
  */
 public class Storage {
+
     private ArrayList<String> quoteList;
+
     Storage(String url)
     {
         quoteList = new ArrayList<>();

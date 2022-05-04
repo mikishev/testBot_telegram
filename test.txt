@@ -1,1 +1,0 @@
-Sometext fot test pushing 2 repositories in bitbucket and github/

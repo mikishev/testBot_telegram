@@ -41,25 +41,17 @@ public class WeatherProvider {
     public WeatherInfo get(String city) {
 
         WeatherInfo weatherInfo = new WeatherInfo();
-//        Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
-//        String result = toLatinTrans.transliterate(city);
-        String result = null;
-        try {
-            result = URLEncoder.encode(city, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        Map<String, String> params = Map.of("q", result,
+
+        Map<String, String> params = Map.of("q", city,
                 "appid", appKey,
                 "units", "metric",
                 "lang", "ru");
-        System.out.println(result);
-//                String weatherResourceUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + result + "&appid=" + appKey + "&units=metric&lang=ru";
+
+
         String weatherResourceUrl = "http://api.openweathermap.org/data/2.5/weather?q={q}&appid={appid}&units={units}&lang={lang}";
 
         try {
-
-            System.out.println(weatherResourceUrl);
+            
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(weatherResourceUrl, String.class, params);
 
             if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {

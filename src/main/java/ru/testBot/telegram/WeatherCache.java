@@ -1,5 +1,7 @@
 package ru.testBot.telegram;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.Map;
 /**
  * Weather cache.
  */
+@Slf4j
 public class WeatherCache {
 
     private final Map<String, WeatherInfo> cache = new HashMap<>();
@@ -37,11 +40,14 @@ public class WeatherCache {
             result = weatherProvider.get(city);
             if (cache.get(city) == null) {
                 cache.put(city, result);
+                log.info("Weather info for " + city + " has been downloaded!");
             } else if (result.getExpiryTime().compareTo(LocalDateTime.now().plusHours(1)) > 0) {
                 cache.put(city, result);
+                log.info("Fresh weather info for " + city + " has been downloaded!");
             }
         } catch (RuntimeException ex) {
             cache.remove(city);
+            log.info("Weather info for " + city + " has been removed!");
 
         }
 

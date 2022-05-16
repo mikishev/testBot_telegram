@@ -1,1 +1,1 @@
-worker: sh target/bin/testBot_telegram
+worker: sh target/bin/testBot_telegram-1.0-SNAPSHOT.jar

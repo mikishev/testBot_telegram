@@ -1,6 +1,7 @@
 package ru.testBot.telegram;
 
-import com.ibm.icu.text.Transliterator;
+
+
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -69,7 +70,7 @@ public class WeatherProvider {
 
             }
         } catch (Exception ex) {
-            log.error("ERROR!!!: " + city + " doesn't exist!");
+            log.warn("WARN! : " + city + " doesn't exist!");
             throw new RuntimeException("disconnected" + ex.getMessage());
         }
         return weatherInfo;

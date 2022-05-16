@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +13,13 @@ import java.util.List;
 /**
  * LoggerAspect
  */
+
 @Slf4j
+@Controller
 @Aspect
 @Component
 public class LoggerAspect {
+
 
     /**
      * pointcut
@@ -57,7 +62,7 @@ public class LoggerAspect {
     public void afterException(JoinPoint joinPoint, Throwable ex) {
         String methodName = joinPoint.getSignature().getName();
         List<String> args = getArgs(joinPoint);
-        log.error("ERROR!!! Failed to method={} args={} error={}", methodName, args, ex);
+        log.warn("Warn!!! Failed to method={} args={} error={}", methodName, args, ex);
     }
 
     /**

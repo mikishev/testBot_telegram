@@ -1,6 +1,6 @@
 package ru.testBot.telegram;
 
-import lombok.extern.slf4j.Slf4j;
+
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 
-@Slf4j
+
 public class Bot extends TelegramLongPollingBot {
 
 
